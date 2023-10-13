@@ -54,3 +54,13 @@ the area. Just as the main languages, the star * is the symbol
 to do multiplication. define area as a float which is the product
 of the two variables inserted.  Then, you print it, 
 area, just as you print anything you have stored as a variable.
+
+SAVING FILES ON GIT - VERY IMPORTANT
+
+If you want to save everything you did, here are the commands 
+with the right order:
+git add .
+git commit -m "Type the description of what u want to save"
+git push
+
+So, thats it. And the dot at add . is to save everything
