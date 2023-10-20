@@ -3,6 +3,6 @@
 int main()
 {
     char name[]="Pedro";
-    printf("The first letter is %c",name[1]);
+    printf("hello");
     return 0;
 }

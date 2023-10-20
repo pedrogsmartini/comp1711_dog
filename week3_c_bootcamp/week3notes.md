@@ -12,3 +12,17 @@ So, you do:
    scanf(" %x", &label);
    which x could be d, f, c...
    Use a spacebar in the scanf
+
+
+
+   Code notes:
+       int a = 0;
+    int cnt = 0;
+    while (a==0)
+    {
+        if 
+    }
+
+
+    char* --> pointer to character, you can write as a word
+    char word[] --> also a pointer to character writen in a different way
