@@ -2,17 +2,17 @@
 
 int main() {
 
-    int label;
+    char label;
     printf("Choose a label: .\n");
-    scanf("%d", &label);
+    scanf("%c", &label);
     switch (label) {
-        case 0:
+        case '0':
             printf("0 was selected .\n");
             break;
-        case 1:
+        case '1':
             printf("1 was selected.\n");
             break;
-        case 2:
+        case '2':
             printf("2 was selected. \n");
             break;
 
