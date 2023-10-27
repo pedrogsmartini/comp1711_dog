@@ -30,5 +30,5 @@ int main()
     scanf("%d",&num);
     int sol = PrimePredictor(num);
     printf("%d\n",sol);
-
+    
 }
