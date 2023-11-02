@@ -3,6 +3,7 @@
 
 int main()
 {
+
     char filename[] = "FitnessData_2023.csv";
     FILE *file = fopen(filename,"r");
     if (filename == NULL)
@@ -39,11 +40,18 @@ int main()
         //printf("%s\n",line_buffer);
         //int a = atoi(line_buffer);
     }
+
+    buffer_size = 150;
+    line_buffer[buffer_size];
+    rec = 0;
+    i = 1;
+
     while (fgets(line_buffer, buffer_size, file) !=NULL)
     {
         rec++;
     }
     printf("Number of records: %d\n",rec);
     fclose(file);
+    
     return 0;
 }
