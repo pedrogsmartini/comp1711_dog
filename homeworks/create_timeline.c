@@ -2,7 +2,7 @@
 
 int main()
 {
-    char filename[] = "timelines.md";
+    char filename[] = "FitnessData_2023.csv";
     FILE *file = fopen(filename,"w");
     if (filename == NULL)
     {
