@@ -4,7 +4,6 @@ int main()
 {
     // array of daily readings
     reading daily_readings[100];
-
     char line[buffer_size];
     char filename[buffer_size];
 
@@ -86,6 +85,19 @@ int main()
 
         case 'C':
         case 'c':
+            counter = 0;
+            while (fgets(line, buffer_size, input))
+            {
+                // split up the line and store it in the right place
+                // using the & operator to pass in a pointer to the bloodIron so it stores it
+                tokeniseRecord(line, ",", daily_readings[counter].date, &daily_readings[counter].bloodIron);
+                mean = mean + daily_readings[counter].bloodIron;
+                counter++;
+            }
+            mean = mean/counter;
+            printf("Your average blood iron was %.2f\n", mean);
+            fclose(input);
+            break;
 
             return 0;
             break;
