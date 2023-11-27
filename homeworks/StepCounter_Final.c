@@ -10,14 +10,21 @@ typedef struct {
 	char steps[6]; 
 } FITNESS_DATA;
 
+typedef struct {
+	char big_length[11];
+	char start[11];
+	char end[11]; 
+} f_command;
+
 // Define any additional variables here
 char date[100]; 
 char time[100];   
 char steps[100];
 char filename[] = "FitnessData_2023.csv";
 char choice;
-char bigsteps[1000]
-char bigintervals[1000]
+char bigsteps[100];
+char bigintervals[1000];
+
 int rec = 0;
 int i = 1;
 int error = 0;
@@ -29,6 +36,7 @@ int lng = 0;
 int a;
 int mean_rnd;
 int period = 0;
+int interval = 0;
 
 // Struct moved to header file
 
@@ -78,6 +86,7 @@ int main()
     int buffer_size = 150;
     char line_buffer[buffer_size];
     FITNESS_DATA data[6000];
+    f_command lng_interval[1000];
     int cnt=0;
     while (fgets(line_buffer, buffer_size, input))
     {
@@ -182,36 +191,42 @@ int main()
     case 'f':
     for (int i = 0; i<cnt;i++)
     {
-        if (atoi(data[i].steps)>500)
-        {
-            bigsteps[i] = i;
-        }
-
+        bigsteps[i] = 0;
     }
     for (int i = 0; i<cnt;i++)
     {
         if (atoi(data[i].steps)>500)
         {
-            bigsteps[i] = i;
+            bigsteps[i]=1;
         }
     }
-    if (sizeof(bigsteps)==0)
+    for (int i = 0; i<cnt;i++)
     {
-        //Tem um só elemento de step 500: ele é o começo e o fim do período
+        printf("%d\n",bigsteps[i]);
     }
-    else
+    int k=0;
+    for (int i = 0; i<cnt;i++) //NEXT STEP: learn how to put integers in array structs, bc its not working
     {
-        for (int i = 0; i<cnt;i++)
+        if (bigsteps[i]==1)
         {
-            if (atoi(data[i].steps)>500)
+            interval++;
+            if (interval==1)
             {
-                bigsteps[i] = i;
+                lng_interval[k].start = i;
             }
-
+            if (bigsteps[i+1]==0)
+            {
+                lng_interval[k].end = 0;
+                lng_interval[k].big_length = interval;
+                k++;
+                interval = 0;
+            }
         }
     }
-
-    
+    for (int i = 0; i<k;i++)
+    {
+        printf("%d\n",lng_interval[i].big_length);
+    }
         break;
 
     case 'Q':
