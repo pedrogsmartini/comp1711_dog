@@ -77,7 +77,7 @@ int main()
             strcpy(data[rec].time, time);
             strcpy(data[rec].steps, steps);
         }
-        printf("For the first record, we have the following date: %s\n",data[0].date);
+        printf("For the first record, we have the following steps: %s\n",data[0].steps);
         fclose(input);
         break;
     }

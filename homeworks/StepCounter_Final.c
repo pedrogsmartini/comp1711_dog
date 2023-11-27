@@ -14,11 +14,21 @@ typedef struct {
 char date[100]; 
 char time[100];   
 char steps[100];
-
 char filename[] = "FitnessData_2023.csv";
+char choice;
+char bigsteps[1000]
+char bigintervals[1000]
 int rec = 0;
 int i = 1;
 int error = 0;
+int sum = 0;
+int max = 0;
+int min = 100000;
+int few = 0;
+int lng = 0;
+int a;
+int mean_rnd;
+int period = 0;
 
 // Struct moved to header file
 
@@ -59,123 +69,163 @@ void tokeniseRecord(const char *input, const char *delimiter,
 // Complete the main function
 int main() 
 {
-    while (1)
+    FILE *input = fopen(filename, "r");
+    if (!input)
     {
-        FILE *input = fopen(filename, "r");
-        if (!input)
+        error = 1;
+        return 1;
+    }
+    int buffer_size = 150;
+    char line_buffer[buffer_size];
+    FITNESS_DATA data[6000];
+    int cnt=0;
+    while (fgets(line_buffer, buffer_size, input))
+    {
+        tokeniseRecord(line_buffer, ",", date, time, steps);
+        strcpy(data[cnt].date, date);
+        strcpy(data[cnt].time, time);
+        strcpy(data[cnt].steps, steps);
+        cnt++;
+    }
+    fclose(input);
+    printf("Menu options: \n");
+    printf("A: Specify the filename to be imported \n");
+    printf("B: Display the total number of records in the file\n");
+    printf("C: Find the date and time of the timeslot with the fewest steps\n");
+    printf("D: Find the date and time of the timeslot with the largest number of steps\n");
+    printf("E: Find the mean step count of all the records in the file\n");
+    printf("F: Find the longest continuous period where the step count is above 500 steps\n"); 
+    printf("Q: Quit\n");    
+
+    // get the next character typed in and store in the 'choice'
+    choice = getchar();
+
+    // this gets rid of the newline character which the user will enter
+    // as otherwise this will stay in the stdin and be read next time
+    while (getchar() != '\n');
+
+
+    // switch statement to control the menu.
+    switch (choice)
+    {
+    // this allows for either capital or lower case
+    case 'A':
+    case 'a':
+        printf("Input filename: "); //You dont have to write that. The code will!!
+        if (error == 0)
         {
-            error = 1;
-            return 1;
+            printf("File successfully loaded.\n");
         }
-        int buffer_size = 150;
-        char line_buffer[buffer_size];
-        FITNESS_DATA data[6000];
-        int cnt=0;
-        while (fgets(line_buffer, buffer_size, file))
+        else
         {
-            tokeniseRecord(line_buffer, ",", date, time, steps);
-            strcpy(initdata[rec].date, date);
-            strcpy(initdata[rec].time, time);
-            strcpy(initdata[rec].steps, steps);
-            cnt++;
+            printf("Error: Could not find or open the file.\n");
         }
-        printf("Menu options: \n");
-        printf("A: Specify the filename to be imported \n");
-        printf("B: Display the total number of records in the file\n");
-        printf("C: Find the date and time of the timeslot with the fewest steps\n");
-        printf("D: Find the date and time of the timeslot with the largest number of steps\n");
-        printf("E: Find the mean step count of all the records in the file\n");
-        printf("F: Find the longest continuous period where the step count is above 500 steps\n"); 
-        printf("Q: Quit\n");    
+        return 1;
+        break;
 
-       // get the next character typed in and store in the 'choice'
-        choice = getchar();
+    case 'B':
+    case 'b':
+        printf("Total records: %d\n",cnt);
+        return 1;
+        break;
 
-        // this gets rid of the newline character which the user will enter
-        // as otherwise this will stay in the stdin and be read next time
-        while (getchar() != '\n');
-
-
-        // switch statement to control the menu.
-        switch (choice)
+    case 'C': //GET THE FEWEST STEPS. Question: can it be repeated? If so, how to be printed???
+    case 'c':
+        for (int i = 0; i<cnt; i++)
         {
-        // this allows for either capital or lower case
-        case 'A':
-        case 'a':
-            printf("Input filename: \n");
-            if (error == 0)
+            if (atoi(data[i].steps)<min)
             {
-                printf("File successfully loaded.")
+                few=i;
+                min = atoi(data[i].steps);
             }
-            else
+        }
+        printf("Fewest steps: %d\n",min);
+        return 1;
+        break;
+
+    case 'D': //GET THE LARGEST STEPS. Question: can it be repeated? If so, how to be printed???
+    case 'd':
+        for (int i = 0; i<cnt; i++)
+        {
+            if (atoi(data[i].steps)>max)
             {
-                printf("Error: Could not find or open the file.")
+                lng=i;
+                max = atoi(data[i].steps);
             }
+        }
+        printf("Longest steps: %s\n",data[lng].steps);
+        return 1;
+        break;
 
-            fclose(input);
-            break;
+    case 'E': //MEAN STEP COUNT
+    case 'e':
+        for (int i = 0; i<cnt;i++)
+        {
+            sum = sum + atoi(data[i].steps);
+        }
+        float mean = sum/cnt;
+        //Round mean
+        a = (int) mean;
+        if (mean - a < 0.5)
+        {
+            mean_rnd=a;
+        }
+        else
+        {
+            mean_rnd=a+1;
+        }
+        printf("Mean step count: %d\n",mean_rnd);
+        return 1;
+        break;
 
-        case 'B':
-        case 'b':
-            counter = 0;
-            while (fgets(line, buffer_size, input))
+    case 'F': //LONG PERIOD START-END
+    case 'f':
+    for (int i = 0; i<cnt;i++)
+    {
+        if (atoi(data[i].steps)>500)
+        {
+            bigsteps[i] = i;
+        }
+
+    }
+    for (int i = 0; i<cnt;i++)
+    {
+        if (atoi(data[i].steps)>500)
+        {
+            bigsteps[i] = i;
+        }
+    }
+    if (sizeof(bigsteps)==0)
+    {
+        //Tem um só elemento de step 500: ele é o começo e o fim do período
+    }
+    else
+    {
+        for (int i = 0; i<cnt;i++)
+        {
+            if (atoi(data[i].steps)>500)
             {
-                // split up the line and store it in the right place
-                // using the & operator to pass in a pointer to the bloodIron so it stores it
-                tokeniseRecord(line, ",", daily_readings[counter].date, &daily_readings[counter].bloodIron);
-                mean = mean + daily_readings[counter].bloodIron;
-                counter++;
+                bigsteps[i] = i;
             }
-            printf("Total records: %d\n",counter)
-            break;
 
-        case 'C':
-        case 'c':
-            counter = 0;
-            while (fgets(line, buffer_size, input))
-            {
-                // split up the line and store it in the right place
-                // using the & operator to pass in a pointer to the bloodIron so it stores it
-                tokeniseRecord(line, ",", daily_readings[counter].date, &daily_readings[counter].bloodIron);
-                mean = mean + daily_readings[counter].bloodIron;
-                counter++;
-            }
-            mean = mean/counter;
-            printf("Your average blood iron was %.2f\n", mean);
-            fclose(input);
-            break;
+        }
+    }
 
-            return 0;
-            break;
+    
+        break;
 
-        case 'D':
-        case 'd':
-            return 0;
-            break;
+    case 'Q':
+    case 'q':
+        return 0;
+        break;
 
-        case 'E':
-        case 'e':
-            return 0;
-            break;
-
-        case 'F':
-        case 'f':
-            return 0;
-            break;
-
-        case 'Q':
-        case 'q':
-            return 0;
-            break;
-
-        default: 
-            printf("Invalid choice. Try again.\n");
-            fclose(input);
-            break;
+    default: 
+        printf("Invalid choice. Try again.\n");
+        fclose(input);
+        break;
 
    
 
    
-        }
     }
 }

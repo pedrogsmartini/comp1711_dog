@@ -44,6 +44,7 @@ int main()
         // this gets rid of the newline character which the user will enter
         // as otherwise this will stay in the stdin and be read next time
         while (getchar() != '\n');
+        str array[]={'A','B','C','D','E','F','G'} 
 
 
         // switch statement to control the menu.
@@ -59,6 +60,7 @@ int main()
                 // using the & operator to pass in a pointer to the bloodIron so it stores it
                 tokeniseRecord(line, ",", daily_readings[counter].date, &daily_readings[counter].bloodIron);
                 counter++;
+                return 1;
             }
             for (int i = 0; i < counter; i++)
             {
