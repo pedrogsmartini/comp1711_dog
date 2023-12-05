@@ -20,7 +20,6 @@ typedef struct {
 char date[100]; 
 char time[100];   
 char steps[100];
-char filename[] = "FitnessData_2023.csv";
 char choice;
 int bigsteps[100];
 char bigintervals[1000];
@@ -28,7 +27,7 @@ char bigintervals[1000];
 int rec = 0;
 int i = 1;
 int error = 0;
-int sum = 0;
+float sum = 0;
 int max = 0;
 int min = 100000;
 int few = 0;
@@ -39,7 +38,7 @@ int period = 0;
 int interval = 0;
 FILE *input;
 int rep = 0;
-
+char filename[1000];
 int buffer_size = 150;
 char line_buffer[150];
 FITNESS_DATA data[6000];
@@ -111,11 +110,22 @@ int main()
         // this allows for either capital or lower case
         case 'A':
         case 'a':
+            printf("Input filename: "); //You dont have to write that. The code will!!
+            fgets(filename, 1000, stdin);
+            size_t newlinePos = strcspn(filename, "\n");
+            if (newlinePos < strlen(filename)) 
+            {
+                filename[newlinePos] = '\0';
+            }          
             input = fopen(filename, "r");
             if (!input)
             {
-                error = 1;
-                return 1;
+                printf("Error: Could not find or open the file.\n");
+                break;
+            }
+            else
+            {
+                printf("File successfully loaded.\n");
             }
             while (fgets(line_buffer, buffer_size, input))
             {
@@ -129,19 +139,6 @@ int main()
                 }
             }
             fclose(input);
-            printf("Input filename: "); //You dont have to write that. The code will!!
-            char name[1000];
-            fgets(name, 1000, stdin);
-            name[strcspn(name, "\n")] = 0;
-            int value = strcmp(name,filename);
-            if (value ==0)
-            {
-                printf("File successfully loaded.\n");
-            }
-            else
-            {
-                printf("Error: Could not find or open the file.\n");
-            }
             fflush(stdin);
             rep++;
             break;
@@ -184,7 +181,7 @@ int main()
 
         case 'E':
         case 'e':
-        sum = 0;
+            sum = 0;
             for (int i = 0; i<cnt;i++)
             {
                 sum = sum + atoi(data[i].steps);
